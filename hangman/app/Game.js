@@ -14,7 +14,7 @@ class Game {
   }
 
   currentStep = 0;
-  lastStep = 8;
+  lastStep = 7;
 
   quotes = [
     {
@@ -65,16 +65,19 @@ class Game {
   drawQuote() {
     const content = this.quote.getContent();
     this.wordWrapper.innerHTML = content;
+    if (!content.includes("_")) {
+      this.winning();
+    }
   }
 
   winning() {
     this.wordWrapper.innerHTML = "Gratulacje! wygrywasz!";
-    this.wordWrapper.innerHTML = "";
+    this.lettersWrapper.innerHTML = "";
   }
 
   loosing() {
     this.wordWrapper.innerHTML = "Przegrywasz! Koniec gry!";
-    this.wordWrapper.innerHTML = "";
+    this.lettersWrapper.innerHTML = "";
   }
 
   start() {
