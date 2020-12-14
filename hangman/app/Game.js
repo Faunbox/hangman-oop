@@ -13,6 +13,9 @@ class Game {
     this.quote = new Quote(text);
   }
 
+  currentStep = 0;
+  lastStep = 8;
+
   quotes = [
     {
       text: "pan tadeusz",
@@ -32,8 +35,19 @@ class Game {
     },
   ];
 
-  letters(letter) {
-    console.table(letter);
+  letters(letter, event) {
+    event.target.disabled = true;
+    if (this.quote.guess(letter)) {
+      this.drawQuote();
+    } else {
+      this.currentStep++;
+      document.getElementsByClassName("step")[
+        this.currentStep
+      ].style.opacity = 1;
+      if (this.currentStep == this.lastStep) {
+        this.loosing();
+      }
+    }
   }
 
   buildLetters() {
@@ -41,16 +55,32 @@ class Game {
       const label = (i + 10).toString(36);
       const button = document.createElement("button");
       button.innerHTML = label;
-      button.addEventListener("click", () => {
-        this.letters(label);
-        // console.log(button.innerHTML);
+      button.addEventListener("click", (event) => {
+        this.letters(label, event);
       });
       this.lettersWrapper.appendChild(button);
     }
   }
 
+  drawQuote() {
+    const content = this.quote.getContent();
+    this.wordWrapper.innerHTML = content;
+  }
+
+  winning() {
+    this.wordWrapper.innerHTML = "Gratulacje! wygrywasz!";
+    this.wordWrapper.innerHTML = "";
+  }
+
+  loosing() {
+    this.wordWrapper.innerHTML = "Przegrywasz! Koniec gry!";
+    this.wordWrapper.innerHTML = "";
+  }
+
   start() {
+    document.getElementsByClassName("step")[this.currentStep].style.opacity = 1;
     this.buildLetters();
+    this.drawQuote();
   }
 }
 
